@@ -49,16 +49,36 @@ public class JoBot extends AdvancedRobot
 	/**
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
-	public void onHitByBullet(HitByBulletEvent e) {
+		public void onHitByBullet(HitByBulletEvent e) {
+		setTurnLeft(90); 
 		back(10);
-		fire(1); //back up and fire again
+		setTurnGunLeft(9999); 
+		fire(1); 
 	}
 	
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall(HitWallEvent e) {
-		back(20); 
-		setTurnLeft(90); //if moving back doesn't move it away from the wall, turning left/right should
+		// Replace the next line with any behavior you would like
+		back(20);
+		setTurnLeft(90); 
+	}
+	
+	public void onHitByBulletEvent(HitByBulletEvent e){
+		//use e.getHeading() to determine where the bullet came from
+		//use e.getName() to determine bot
+		//find a way to target this bot and shoot
 	}	
+	
+	/*
+	 * So I ran the code that I just uploaded, 
+	 * and saw that it will just shoot the first
+	 * bot it sees and won't pay attention to anyone
+	 * else even if they're being shot at. So I think 
+	 * we should create a method for what happens when 
+	 * our bot gets shot: change its target to whoever is 
+	 * shooting it. So it'll set its priorities properly.
+	 * The header for the method is above this comment.
+	 */	
 }
