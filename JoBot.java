@@ -64,12 +64,13 @@ public class JoBot extends AdvancedRobot
 		setBack(60);
 	}
 	
+/*
 	public void onHitByBulletEvent(HitByBulletEvent e){
 		//use e.getHeading() to determine where the bullet came from
 		//use e.getName() to determine bot
 		//find a way to target this bot and shoot
 	}	
-	
+	*/
 	/*
 	 * So I ran the code that I just uploaded, 
 	 * and saw that it will just shoot the first
