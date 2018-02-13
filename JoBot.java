@@ -26,7 +26,7 @@ public class JoBot extends AdvancedRobot
 	 */
 	//create shooting strategies: head on, circular, pattern
 	//MAYBE: guess factor targeting because it's complex
-	public void onScannedRobot(ScannedRobotEvent e) {
+	public void onScannedRobot(ScannedRobotEvent e)
 		//turns right so it's easier to move (can just use setAhead or setBack)
 		setTurnRight(e.getBearing() + 90); 
 		
@@ -40,7 +40,7 @@ public class JoBot extends AdvancedRobot
 		if (e.getDistance() < 100){
 			fire(3); //fires more if the bot is closer
 		} else {
-			fire(1);
+			fire(2);
 		}
 		
 		prevEnergy = e.getEnergy(); //resets prevEnergy to use when this event is called again
@@ -53,16 +53,15 @@ public class JoBot extends AdvancedRobot
 		setTurnLeft(90); 
 		back(10);
 		setTurnGunLeft(9999); 
-		fire(1); 
+		fire(1.5); 
 	}
 	
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall(HitWallEvent e) {
-		// Replace the next line with any behavior you would like
-		back(20);
-		setTurnLeft(90); 
+		setTurnRight(e.getBearing() + 90); 
+		setBack(60);
 	}
 	
 	public void onHitByBulletEvent(HitByBulletEvent e){
