@@ -62,14 +62,12 @@ public class JoBot extends AdvancedRobot
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall(HitWallEvent e) {
-		public void onHitWall(HitWallEvent e) {
 		e.setPriority(1); 
 		setTurnLeft(e.getBearing() + 90); 
 		setAhead(500); 
 		//setTurnGunLeft(9999); 
 		setTurnRight(90); 
 		scan(); 	
-	}
 	}	
 	
 	public void onHitRobot(HitRobotEvent e){
