@@ -15,9 +15,12 @@ public class JoBot extends AdvancedRobot
 	double prevEnergy = 100.00; //initializes prevEnergy for onScannedRobot
 	public void run() {
 		setColors(Color.red,Color.blue,Color.green); // body,gun,radar
-
+		int turn = 1; 
 		// Robot main loop
-		setTurnGunRight(99999); //scans for robots
+		for (int i = 0; i < 100; i++){
+			setTurnGunLeft(99999); 
+			setTurnGunRight(99999); 
+		} //scans for robots
 	}
 
 	/**
@@ -25,7 +28,11 @@ public class JoBot extends AdvancedRobot
 	 */
 	//create shooting strategies: head on, circular, pattern
 	public void onScannedRobot(ScannedRobotEvent e) { 
-		setTurnRight(e.getBearing() + 90); //turns to the right so it's easier to dodge
+		if ((turn%2) == 0){
+			setTurnLeft(e.getBearing() + 90); //turns to the right to make it easier to
+		} else {
+			setTurnLeft(e.getBearing() - 90); 
+		}
 		
 		double changeEnergy = prevEnergy - e.getEnergy(); //checks for change in energy
 		if (changeEnergy >= 0 && changeEnergy <= 3){
@@ -33,43 +40,58 @@ public class JoBot extends AdvancedRobot
 		}
 		
 		setTurnGunLeft(9999); //scans before firing
-		if (e.getDistance() < 100){
-			fire(2.5); 
-		} else {
-			fire(1.5);
-		}
-		
+		fire(2); 
+		turn++; 
 		prevEnergy = e.getEnergy(); //updates value of prevEnergy
+		setTurnGunLeft(9999); 
 	}
 
 	/**
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
-		setTurnLeft(90); //moves aside for caution
+		e.setPriority(2);  
+		setTurnGunRight(e.getBearing()); //Turns gun right to the direction of where the bullet came from
+		//if (e.getBearing() == 0)
+		fire(2);
+		setTurnRight(90);
 		setAhead(80); 
-		setTurnGunLeft(e.getBearing()); //Turns gun left to the direction of where the bullet came from
-		fire(1.5); 
 	}
 	
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall(HitWallEvent e) {
-		double wallMeasure = Math.max(getBattleFieldWidth(), getBattleFieldHeight());
-		setTurnRight(e.getBearing() + 90); 
-		setAhead(wallMeasure);
+		public void onHitWall(HitWallEvent e) {
+		e.setPriority(1); 
+		setTurnLeft(e.getBearing() + 90); 
+		setAhead(500); 
+		//setTurnGunLeft(9999); 
 		setTurnRight(90); 
-		setAhead(150); 
+		scan(); 	
+	}
 	}	
 	
 	public void onHitRobot(HitRobotEvent e){
-		setTurnLeft(e.getBearing() + 90); //moves aside
-		setBack(100); 
-		setTurnGunRight(e.getBearing()); //turns gun and fires, rechecks and fires again
-		fire(1);
-		setTurnGunLeft(e.getBearing()); 
-		fire(1);
+		e.setPriority(2);
+		if (e.isMyFault()){ 
+			setBack(200); 
+		} else {
+			setTurnGunLeft(e.getBearing()); 
+			double myEnergy = this.getEnergy(); 
+			if (myEnergy > 1){
+				fire(2); 
+			} else {
+				fire(1); 
+			}
+		}
 	}
+	
+	public void onBulletMissed(BulletMissedEvent e){
+		setStop(); 
+		setTurnGunLeft(720); 
+		scan(); 
+	}	
+	//create method/algorithn for preventing bot from running into walls (bc running into walls = loss of power and possibility of getting stuck)
 
 }
